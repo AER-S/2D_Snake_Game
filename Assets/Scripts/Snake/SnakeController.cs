@@ -9,6 +9,7 @@ public class SnakeController : MonoBehaviour
     [SerializeField] private int snakePartsStartingNumber = 2;
     private List<SnakePartController> snakeParts=new List<SnakePartController>();
     private float partSize;
+    private bool isAlive;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class SnakeController : MonoBehaviour
 
     private void Start()
     {
+        isAlive = true;
         CheckSnakePartsSatringNumber();
         StartSnake();
     }
@@ -40,5 +42,20 @@ public class SnakeController : MonoBehaviour
             Vector3 newPosition = new Vector3(-i * partSize, 0f, 0f);
             AddNewSnakePart(i, newPosition);
         }
+    }
+
+    public float GetStepSize()
+    {
+        return partSize;
+    }
+
+    public List<SnakePartController> GetSnakeParts()
+    {
+        return snakeParts;
+    }
+
+    public bool GetIsAlive()
+    {
+        return isAlive;
     }
 }
