@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,13 +60,27 @@ public class SnakeMovementsController : MonoBehaviour
             if (index ==0)
             {
                 Vector2 nextStep = direction * snakeController.GetStepSize();
-                snakePart.transform.position += new Vector3(nextStep.x, nextStep.y, 0f);
+                StartCoroutine(LerpToPosition(snakePart,position+(Vector3)nextStep,stepTime));
             }
             else
             {
-                snakePart.transform.position = swapPosition;
+                StartCoroutine(LerpToPosition(snakePart, swapPosition, stepTime));
                 swapPosition = position;
             }
         }
+    }
+
+    IEnumerator LerpToPosition(SnakePartController _snakePart, Vector3 _destination, float _time)
+    {
+        float timeCounter = 0;
+        Vector3 startPosition = _snakePart.transform.position;
+        while (timeCounter<_time)
+        {
+            _snakePart.transform.position = Vector3.Lerp(startPosition, _destination, timeCounter / _time);
+            timeCounter += Time.deltaTime;
+            yield return null;
+        }
+
+        _snakePart.transform.position = _destination;
     }
 }
