@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SnakeController : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class SnakeController : MonoBehaviour
     private List<SnakePartController> snakeParts=new List<SnakePartController>();
     private float partSize;
     private bool isAlive;
+    
+    public event Action Kill = delegate {  };
 
     private void Awake()
     {
@@ -57,5 +60,11 @@ public class SnakeController : MonoBehaviour
     public bool GetIsAlive()
     {
         return isAlive;
+    }
+
+    public void KillSnake()
+    {
+        isAlive = false;
+        Kill.Invoke();
     }
 }
