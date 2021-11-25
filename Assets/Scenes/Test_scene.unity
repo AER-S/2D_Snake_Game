@@ -218,6 +218,10 @@ PrefabInstance:
       propertyPath: snakePartPrefab
       value: 
       objectReference: {fileID: 4922639369547632496, guid: fb2b799a65c4e544b9b2593a2474f4ce, type: 3}
+    - target: {fileID: 1878363475765552362, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
+      propertyPath: snakePartsStartingNumber
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3678857870016121904, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
       propertyPath: m_RootOrder
       value: 1
