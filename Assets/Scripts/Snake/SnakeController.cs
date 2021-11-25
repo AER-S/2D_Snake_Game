@@ -12,7 +12,7 @@ public class SnakeController : MonoBehaviour
 
     private void Awake()
     {
-        partSize = snakePartPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
+        partSize = snakePartPrefab.GetComponent<SpriteRenderer>().bounds.size.x+0.1f;
     }
 
     private void Start()
