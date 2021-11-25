@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SnakeController))]
@@ -12,6 +13,7 @@ public class SnakeMovementsController : MonoBehaviour
     private void Awake()
     {
         snakeController = GetComponent<SnakeController>();
+        controls = new InputMaster();
     }
 
     private void OnEnable()
@@ -37,11 +39,33 @@ public class SnakeMovementsController : MonoBehaviour
 
     private void Start()
     {
+        direction = Vector2.right;
         InvokeRepeating("Move", stepTime, stepTime);
     }
 
     void Move()
     {
-        
+        if (!snakeController.GetIsAlive())
+        {
+            return;
+        }
+
+        List<SnakePartController> snakeParts = snakeController.GetSnakeParts();
+        Vector3 swapPosition = snakeParts[0].transform.position;
+        foreach (SnakePartController snakePart in snakeParts)
+        {
+            int index = snakeParts.IndexOf(snakePart);
+            Vector3 position = snakePart.transform.position;
+            if (index ==0)
+            {
+                Vector2 nextStep = direction * snakeController.GetStepSize();
+                snakePart.transform.position += new Vector3(nextStep.x, nextStep.y, 0f);
+            }
+            else
+            {
+                snakePart.transform.position = swapPosition;
+                swapPosition = position;
+            }
+        }
     }
 }
