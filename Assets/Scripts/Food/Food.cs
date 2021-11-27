@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface Food
 {
-    void FeedSnake(string _foodName, int _foodValue);
+    void FeedSnake();
 }
