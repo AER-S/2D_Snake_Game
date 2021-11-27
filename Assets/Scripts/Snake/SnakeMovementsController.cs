@@ -8,6 +8,7 @@ public class SnakeMovementsController : MonoBehaviour
     [SerializeField] private float stepTime;
     private InputMaster controls;
     private Vector2 direction;
+    private SnakeController snake;
     
     #region Unity Functions
 
@@ -32,6 +33,7 @@ public class SnakeMovementsController : MonoBehaviour
     private void Start()
     {
         direction = Vector2.right;
+        snake = SnakeController.Instance;
         InvokeRepeating("Move", stepTime, stepTime);
     }
 
@@ -51,7 +53,7 @@ public class SnakeMovementsController : MonoBehaviour
     }
     void Move()
     {
-        SnakeController snake = SnakeController.Instance;
+        
         if (!(snake.GetIsAlive()))
         {
             return;
