@@ -1,29 +1,46 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class BaseFood : MonoBehaviour, Food
+public abstract class BaseFood : Food
 {
-    private string name;
-    private int foodvalue;
+    private FoodItem name;
+    private int foodValue;
 
-    protected void SetName(string _name)
+    private void SetName(FoodItem _name)
     {
         name = _name;
     }
 
-    protected void SetValue(int _amount)
+    private void SetValue(int _amount)
     {
-        foodvalue = _amount;
+        foodValue = _amount;
     }
 
-    public string GetName()
+    public FoodItem GetName()
     {
         return name;
     }
 
-    public int GetFoodValue()
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        return foodvalue;
+        SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
+        if (snakePart)
+        {
+            FeedSnake();
+        }
     }
 
+    public int GetFoodValue()
+    {
+        return foodValue;
+    }
+
+
+    public BaseFood(FoodItem _name, int _foodvalue)
+    {
+        SetName(_name);
+        SetValue(_foodvalue);
+    }
     public abstract void FeedSnake();
 }

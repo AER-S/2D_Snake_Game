@@ -7,9 +7,12 @@ public class SnakeController : MonoBehaviour
 {
     [SerializeField] private SnakePartController snakePartPrefab;
     [SerializeField] private int snakePartsStartingNumber = 2;
+    [SerializeField] private int growthStep = 20;
     private List<SnakePartController> snakeParts=new List<SnakePartController>();
     private float partSize;
     private bool isAlive;
+    private int score;
+    private int lostScore;
     
 
     private static SnakeController instance;
@@ -53,8 +56,19 @@ public class SnakeController : MonoBehaviour
     private void Start()
     {
         isAlive = true;
+        score = 0;
         CheckSnakePartsSatringNumber();
         StartSnake();
+    }
+
+    private void OnEnable()
+    {
+        Grow += GrowSnake;
+    }
+
+    private void OnDisable()
+    {
+        Grow -= GrowSnake;
     }
 
     #endregion
@@ -78,6 +92,26 @@ public class SnakeController : MonoBehaviour
         SnakePartController newSnakePart = Instantiate(snakePartPrefab, this.transform, false);
         newSnakePart.transform.position = _position;
         snakeParts.Insert(_index,newSnakePart);
+    }
+
+    void UpdateScore(int _amount)
+    {
+        score += _amount;
+        CheckLength();
+    }
+
+    void CheckLength()
+    {
+        int neededNewParts = (score + lostScore - snakeParts.Count) / growthStep;
+        for (int i = 1; i < neededNewParts; i++)
+        {
+            Grow.Invoke();
+        }
+    }
+
+    void GrowSnake()
+    {
+        AddNewSnakePart(snakeParts.Count,2 * snakeParts[snakeParts.Count-1].transform.position-snakeParts[snakeParts.Count-2].transform.position);
     }
 
     #endregion
@@ -105,6 +139,12 @@ public class SnakeController : MonoBehaviour
     {
         isAlive = false;
         Die.Invoke();
+    }
+
+    public void EatFood(string _name, int _foodValue)
+    {
+        UpdateScore(_foodValue);
+        Eat.Invoke(_name, _foodValue);
     }
 
     #endregion
