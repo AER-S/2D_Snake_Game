@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -91,11 +90,6 @@ public class SnakeController : MonoBehaviour
     void AddNewSnakePart(int _index, Vector3 _position)
     {
         SnakePartController newSnakePart = Instantiate(snakePartPrefab, this.transform, false);
-        if (_index==0)
-        {
-            Rigidbody2D headRigidbody2D = newSnakePart.AddComponent<Rigidbody2D>();
-            headRigidbody2D.gravityScale = 0f;
-        }
         newSnakePart.transform.position = _position;
         snakeParts.Insert(_index,newSnakePart);
     }
@@ -103,12 +97,13 @@ public class SnakeController : MonoBehaviour
     void UpdateScore(int _amount)
     {
         score += _amount;
+        CheckLength();
     }
 
     void CheckLength()
     {
-        int neededNewParts = ((score + lostScore)-((snakeParts.Count-snakePartsStartingNumber)*growthStep))/growthStep;
-        for (int i = 1; i <= neededNewParts; i++)
+        int neededNewParts = (score + lostScore - snakeParts.Count) / growthStep;
+        for (int i = 1; i < neededNewParts; i++)
         {
             Grow.Invoke();
         }
@@ -149,7 +144,6 @@ public class SnakeController : MonoBehaviour
     public void EatFood(string _name, int _foodValue)
     {
         UpdateScore(_foodValue);
-        CheckLength();
         Eat.Invoke(_name, _foodValue);
     }
 

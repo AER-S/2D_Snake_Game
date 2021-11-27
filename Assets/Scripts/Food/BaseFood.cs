@@ -2,7 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class BaseFood : MonoBehaviour,Food
+public abstract class BaseFood : Food
 {
     private FoodItem name;
     private int foodValue;
@@ -22,7 +22,7 @@ public abstract class BaseFood : MonoBehaviour,Food
         return name;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
         if (snakePart)
@@ -30,9 +30,6 @@ public abstract class BaseFood : MonoBehaviour,Food
             FeedSnake();
         }
     }
-
-    
-    
 
     public int GetFoodValue()
     {
