@@ -220,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 4922639369547632496, guid: fb2b799a65c4e544b9b2593a2474f4ce, type: 3}
     - target: {fileID: 1878363475765552362, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
       propertyPath: snakePartsStartingNumber
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3678857870016121904, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
       propertyPath: m_RootOrder
@@ -269,6 +269,10 @@ PrefabInstance:
     - target: {fileID: 5920977460298435853, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
       propertyPath: m_Name
       value: Snake
+      objectReference: {fileID: 0}
+    - target: {fileID: 9182986338664212265, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}
+      propertyPath: stepTime
+      value: 0.33
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed77e426da4fb544bbc2ec35d4b87081, type: 3}

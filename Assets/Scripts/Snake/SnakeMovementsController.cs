@@ -60,27 +60,29 @@ public class SnakeMovementsController : MonoBehaviour
             if (index ==0)
             {
                 Vector2 nextStep = direction * snakeController.GetStepSize();
-                StartCoroutine(LerpToPosition(snakePart,position+(Vector3)nextStep,stepTime));
+                //StartCoroutine(LerpToPosition(snakePart,position+(Vector3)nextStep,stepTime));
+                snakePart.transform.position += (Vector3) nextStep;
             }
             else
             {
-                StartCoroutine(LerpToPosition(snakePart, swapPosition, stepTime));
+                snakePart.transform.position = swapPosition;
+                //StartCoroutine(LerpToPosition(snakePart, swapPosition, stepTime));
                 swapPosition = position;
             }
         }
     }
 
-    IEnumerator LerpToPosition(SnakePartController _snakePart, Vector3 _destination, float _time)
-    {
-        float timeCounter = 0;
-        Vector3 startPosition = _snakePart.transform.position;
-        while (timeCounter<_time)
-        {
-            _snakePart.transform.position = Vector3.Lerp(startPosition, _destination, timeCounter / _time);
-            timeCounter += Time.deltaTime;
-            yield return null;
-        }
-
-        _snakePart.transform.position = _destination;
-    }
+    // IEnumerator LerpToPosition(SnakePartController _snakePart, Vector3 _destination, float _time)
+    // {
+    //     float timeCounter = 0;
+    //     Vector3 startPosition = _snakePart.transform.position;
+    //     while (timeCounter<_time)
+    //     {
+    //         _snakePart.transform.position = Vector3.Lerp(startPosition, _destination, timeCounter / _time);
+    //         timeCounter += Time.deltaTime;
+    //         yield return null;
+    //     }
+    //
+    //     _snakePart.transform.position = _destination;
+    // }
 }
