@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,13 +8,13 @@ public class SnakeMovementsController : MonoBehaviour
     [SerializeField] private float stepTime;
     private InputMaster controls;
     private Vector2 direction;
-    SnakeController snake =SnakeController.Instance;
-
+    
     #region Unity Functions
 
     private void Awake()
     {
         controls = new InputMaster();
+        
     }
     private void OnEnable()
     {
@@ -52,7 +51,8 @@ public class SnakeMovementsController : MonoBehaviour
     }
     void Move()
     {
-        if (!snake.GetIsAlive())
+        SnakeController snake = SnakeController.Instance;
+        if (!(snake.GetIsAlive()))
         {
             return;
         }
