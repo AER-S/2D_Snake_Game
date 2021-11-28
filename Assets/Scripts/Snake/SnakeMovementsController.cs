@@ -12,6 +12,7 @@ public class SnakeMovementsController : MonoBehaviour
     private SnakeController snake;
     private List<SnakePartController> snakeParts;
     private Vector3 headColliderBounds;
+    private float timeCounter;
     
     #region Unity Functions
 
@@ -38,9 +39,19 @@ public class SnakeMovementsController : MonoBehaviour
         direction = Vector2.right;
         snake = SnakeController.Instance;
         snakeParts = snake.GetSnakeParts();
-        
         headColliderBounds = snake.GetBounds();
-        InvokeRepeating("Move", stepTime, stepTime);
+        ResetTimeCounter();
+    }
+
+    private void Update()
+    {
+        if (timeCounter>=0f)
+        {
+            timeCounter -= Time.deltaTime;
+            return;
+        }
+        Move();
+        ResetTimeCounter();
     }
 
     #endregion
@@ -100,6 +111,11 @@ public class SnakeMovementsController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void ResetTimeCounter()
+    {
+        timeCounter = stepTime;
     }
 
     #endregion
