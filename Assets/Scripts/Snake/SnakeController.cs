@@ -136,6 +136,11 @@ public class SnakeController : MonoBehaviour
         return isAlive;
     }
 
+    public Vector3 GetBounds()
+    {
+        return snakePartPrefab.GetComponent<BoxCollider2D>().size*snakePartPrefab.transform.localScale;
+    }
+
     #endregion
 
     public void KillSnake()
