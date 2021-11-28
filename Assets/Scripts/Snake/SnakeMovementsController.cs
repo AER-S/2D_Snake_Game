@@ -6,9 +6,12 @@ using UnityEngine;
 public class SnakeMovementsController : MonoBehaviour
 {
     [SerializeField] private float stepTime;
+    [SerializeField] private LayerMask obstacleLayerMask;
     private InputMaster controls;
     private Vector2 direction;
     private SnakeController snake;
+    private List<SnakePartController> snakeParts;
+    private Vector3 headColliderBounds;
     
     #region Unity Functions
 
@@ -34,6 +37,9 @@ public class SnakeMovementsController : MonoBehaviour
     {
         direction = Vector2.right;
         snake = SnakeController.Instance;
+        snakeParts = snake.GetSnakeParts();
+        
+        headColliderBounds = snake.GetBounds();
         InvokeRepeating("Move", stepTime, stepTime);
     }
 
@@ -47,40 +53,51 @@ public class SnakeMovementsController : MonoBehaviour
         direction = _newDirection;
     }
 
-    bool CheckForKillingObstacles()
+    bool CheckForObstacles()
     {
+        Vector3 headPos3D = snakeParts[0].transform.position;
+        Vector2 headPos2D = new Vector2(headPos3D.x, headPos3D.y);
+        RaycastHit2D objectAhead = Physics2D.BoxCast(headPos2D, new Vector2(headColliderBounds.x, headColliderBounds.y),
+            0f, direction, 0.1f,
+            obstacleLayerMask);
+        if (objectAhead)
+        {
+            Obstacle obstacle = objectAhead.collider.GetComponent<Obstacle>();
+            if (obstacle!=null)
+            {
+                obstacle.HinderSnake();
+                return true;
+            }
+        }
+
         return false;
     }
     void Move()
     {
-        
         if (!(snake.GetIsAlive()))
         {
             return;
         }
 
-        if (CheckForKillingObstacles())
+        CheckForObstacles();
+
+        if (snake.GetIsAlive())
         {
-            snake.KillSnake();
-            return;
-        }
-        
-        
-        List<SnakePartController> snakeParts = snake.GetSnakeParts();
-        Vector3 swapPosition = snakeParts[0].transform.position;
-        foreach (SnakePartController snakePart in snakeParts)
-        {
-            int index = snakeParts.IndexOf(snakePart);
-            Vector3 position = snakePart.transform.position;
-            if (index ==0)
+            Vector3 swapPosition = snakeParts[0].transform.position;
+            foreach (SnakePartController snakePart in snakeParts)
             {
-                Vector2 nextStep = direction * snake.GetStepSize();
-                snakePart.transform.position += (Vector3) nextStep;
-            }
-            else
-            {
-                snakePart.transform.position = swapPosition;
-                swapPosition = position;
+                int index = snakeParts.IndexOf(snakePart);
+                Vector3 position = snakePart.transform.position;
+                if (index ==0)
+                {
+                    Vector2 nextStep = direction * snake.GetStepSize();
+                    snakePart.transform.position += (Vector3) nextStep;
+                }
+                else
+                {
+                    snakePart.transform.position = swapPosition;
+                    swapPosition = position;
+                }
             }
         }
     }
