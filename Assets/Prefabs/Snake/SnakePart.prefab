@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2294578590666044656}
   - component: {fileID: 4787654165928193305}
-  - component: {fileID: 4477752939699943372}
   - component: {fileID: 4922639369547632496}
+  - component: {fileID: -8886243700485363821}
   m_Layer: 0
   m_Name: SnakePart
   m_TagString: Untagged
@@ -86,7 +86,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &4477752939699943372
+--- !u!114 &4922639369547632496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5982900757255321336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aedb2a56e5ae07d4dac4f20da5943d7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &-8886243700485363821
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +108,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -112,15 +124,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 9, y: 9}
   m_EdgeRadius: 0
---- !u!114 &4922639369547632496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5982900757255321336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aedb2a56e5ae07d4dac4f20da5943d7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
