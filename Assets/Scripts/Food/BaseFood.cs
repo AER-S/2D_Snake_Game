@@ -25,7 +25,11 @@ public abstract class BaseFood : MonoBehaviour,Food
     private void OnTriggerEnter2D(Collider2D other)
     {
         SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
-        if (snakePart) FeedSnake();
+        if (snakePart)
+        {
+            FeedSnake();
+            Destroy(gameObject);
+        }
     }
 
     public int GetFoodValue()

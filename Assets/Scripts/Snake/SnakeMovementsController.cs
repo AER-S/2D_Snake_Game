@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(SnakeController))]
 public class SnakeMovementsController : MonoBehaviour
 {
-    [SerializeField] private float stepTime;
+    private float stepTime;
     [SerializeField] private LayerMask obstacleLayerMask;
     private InputMaster controls;
     private Vector2 direction;
@@ -48,7 +48,7 @@ public class SnakeMovementsController : MonoBehaviour
 
     private void Update()
     {
-        if (timeCounter>=0f)
+        if (timeCounter>0f)
         {
             timeCounter -= Time.deltaTime;
             return;
