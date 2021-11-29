@@ -19,12 +19,13 @@ public class SnakeMovementsController : MonoBehaviour
     private void Awake()
     {
         controls = new InputMaster();
-        
+        snake = SnakeController.Instance;
     }
     private void OnEnable()
     {
         controls.Enable();
         controls.Snake.Movments.performed += context => GetNewDirection(context.ReadValue<Vector2>());
+        snake.SpeedChanged += CheckSpeed;
     }
     private void OnDisable()
     {
@@ -33,13 +34,15 @@ public class SnakeMovementsController : MonoBehaviour
             controls.Snake.Movments.performed -= context => GetNewDirection(context.ReadValue<Vector2>());
             controls.Disable();
         }
+
+        snake.SpeedChanged -= CheckSpeed;
     }
     private void Start()
     {
         direction = Vector2.right;
-        snake = SnakeController.Instance;
         snakeParts = snake.GetSnakeParts();
         headColliderBounds = snake.GetBounds();
+        stepTime = snake.GetSpeed();
         ResetTimeCounter();
     }
 
@@ -85,12 +88,13 @@ public class SnakeMovementsController : MonoBehaviour
     }
     void Move()
     {
+        CheckForObstacles();
         if (!(snake.GetIsAlive()))
         {
             return;
         }
 
-        CheckForObstacles();
+        
 
         if (snake.GetIsAlive())
         {
@@ -116,6 +120,11 @@ public class SnakeMovementsController : MonoBehaviour
     void ResetTimeCounter()
     {
         timeCounter = stepTime;
+    }
+
+    void CheckSpeed(float _newSpeed)
+    {
+        stepTime = _newSpeed; 
     }
 
     #endregion

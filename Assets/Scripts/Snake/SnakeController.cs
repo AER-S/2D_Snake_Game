@@ -14,6 +14,7 @@ public class SnakeController : MonoBehaviour
     private bool isAlive;
     private int score;
     private int lostScore;
+    [SerializeField]private float speed;
     
 
     private static SnakeController instance;
@@ -31,7 +32,9 @@ public class SnakeController : MonoBehaviour
     public event Action<string,int> Eat = delegate(string _foodName, int _foodValue) {  };
     public event Action Grow = delegate {  };
     public event Action<string,int> Hit = delegate(string _obstacleName, int _damage) {  };
-    public event Action<string> PowerUp = delegate(string _powerUpName) {  }; 
+    public event Action<string> PowerUp = delegate(string _powerUpName) {  };
+    
+    public event Action<float> SpeedChanged = delegate(float _newSpeed) {  }; 
 
     #endregion
 
@@ -86,10 +89,12 @@ public class SnakeController : MonoBehaviour
         {
             Vector3 newPosition = new Vector3(-i * partSize, 0f, 0f);
             AddNewSnakePart(i, newPosition);
+            
         }
         
         Rigidbody2D snakeHead = snakeParts[0].AddComponent<Rigidbody2D>();
         snakeHead.gravityScale = 0;
+        snakeParts[0].gameObject.layer = 7;
     }
     void AddNewSnakePart(int _index, Vector3 _position)
     {
@@ -121,6 +126,19 @@ public class SnakeController : MonoBehaviour
 
     #region Public Functions
 
+    #region Setters
+
+    public void SetSpeed(float _newSpeed)
+    {
+        if (speed!=_newSpeed)
+        {
+            SpeedChanged.Invoke(_newSpeed);
+        }
+        speed = _newSpeed;
+    }
+
+    #endregion
+    
     #region Getters
 
     public float GetStepSize()
@@ -141,6 +159,11 @@ public class SnakeController : MonoBehaviour
         return snakePartPrefab.GetComponent<BoxCollider2D>().size*snakePartPrefab.transform.localScale;
     }
 
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
     #endregion
 
     public void KillSnake()
@@ -156,5 +179,9 @@ public class SnakeController : MonoBehaviour
         Eat.Invoke(_name, _foodValue);
     }
 
+    public void PowerUpSnake(string _powerUpName)
+    {
+        PowerUp.Invoke(_powerUpName);
+    }
     #endregion
 }

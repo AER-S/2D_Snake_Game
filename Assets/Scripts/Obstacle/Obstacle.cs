@@ -5,7 +5,8 @@ using UnityEngine;
 public enum ObstacleItem
 {
     fence,
-    boulder
+    boulder,
+    snakePart
 }
 public interface Obstacle
 {
