@@ -12,5 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c1753992f0925408911043909d194f, type: 3}
   m_Name: Level01
   m_EditorClassIdentifier: 
-  index: 0
+  index: 1
   foodDistributions: []
+  powerUpDistributions:
+  - powerUp: {fileID: -1247411853086769024, guid: 4919d9058bf1b2a4082a03a80930ec75, type: 3}
+    quantity: 3
+  obstaclesDistributions:
+  - obstacle: {fileID: 8081728891229230744, guid: 18b051b0d72f9674ab6b9178fa0c3c32, type: 3}
+    positions:
+    - {x: -6, y: 4}
