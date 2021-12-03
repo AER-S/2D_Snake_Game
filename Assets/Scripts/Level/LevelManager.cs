@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float foodSpawningTime;
     private List<FoodDistribution> levelFoodDistributions = new List<FoodDistribution>();
     private List<PowerUpDistribution> levelPowerUpDistributions = new List<PowerUpDistribution>();
-    private List<ObstaclesDistribution> levelObstaclesDistributions;
+    private List<ObstaclesDistribution> levelObstaclesDistributions = new List<ObstaclesDistribution>();
     private Vector2 grid = new Vector2(30, 14);
     private float foodTimeCounter;
     
