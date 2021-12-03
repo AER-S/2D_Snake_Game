@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(SnakeController))]
 public class SnakeMovementsController : MonoBehaviour
@@ -13,6 +14,8 @@ public class SnakeMovementsController : MonoBehaviour
     private List<SnakePartController> snakeParts;
     private Vector3 headColliderBounds;
     private float timeCounter;
+    private bool wrap;
+    private Vector2 wrapDirection = Vector2.zero;
     
     #region Unity Functions
 
@@ -43,6 +46,7 @@ public class SnakeMovementsController : MonoBehaviour
         snakeParts = snake.GetSnakeParts();
         headColliderBounds = snake.GetBounds();
         stepTime = snake.GetSpeed();
+        wrap = false;
         ResetTimeCounter();
     }
 
@@ -67,28 +71,64 @@ public class SnakeMovementsController : MonoBehaviour
         direction = _newDirection;
     }
 
-    bool CheckForObstacles()
+    bool CheckForObjectsAhead()
     {
         Vector3 headPos3D = snakeParts[0].transform.position;
         Vector2 headPos2D = new Vector2(headPos3D.x, headPos3D.y);
         RaycastHit2D objectAhead = Physics2D.BoxCast(headPos2D, new Vector2(headColliderBounds.x, headColliderBounds.y),
-            0f, direction, 0.1f,
+            0f, direction, 1f,
             obstacleLayerMask);
         if (objectAhead)
         {
-            Obstacle obstacle = objectAhead.collider.GetComponent<Obstacle>();
-            if (obstacle!=null)
+            if (CheckForObstacles(objectAhead))
             {
-                obstacle.HinderSnake();
+                return true;
+            }
+
+            if (CheckForWrappers(objectAhead))
+            {
                 return true;
             }
         }
 
         return false;
     }
+
+    bool CheckForObstacles(RaycastHit2D _objectAhead)
+    {
+        Obstacle obstacle = _objectAhead.collider.GetComponent<Obstacle>();
+        if (obstacle!=null)
+        {
+            obstacle.HinderSnake();
+            return true;
+        }
+
+        return false;
+    }
+
+    bool CheckForWrappers(RaycastHit2D _objectAhead)
+    {
+        Wrapper wrapper = _objectAhead.collider.GetComponent<Wrapper>();
+        if (wrapper != null)
+        {
+            Wrap(wrapper);
+            return true;
+
+        } 
+        return false;
+    }
+
+    void Wrap(Wrapper _wrapper)
+    {
+        Debug.Log("Hit Wrapper");
+        Wrapper twin = _wrapper.GetTwin();
+        Vector3 direction3D = twin.transform.position+(Vector3)twin.GetDirection() - _wrapper.transform.position-(Vector3)_wrapper.GetDirection();
+        wrapDirection = new Vector2(direction3D.x, direction3D.y);
+        wrap = true;
+    }
     void Move()
     {
-        CheckForObstacles();
+        CheckForObjectsAhead();
         if (!(snake.GetIsAlive()))
         {
             return;
@@ -105,8 +145,9 @@ public class SnakeMovementsController : MonoBehaviour
                 Vector3 position = snakePart.transform.position;
                 if (index ==0)
                 {
-                    Vector2 nextStep = direction * snake.GetStepSize();
+                    Vector2 nextStep = ((wrap)?wrapDirection:direction) * snake.GetStepSize();
                     snakePart.transform.position += (Vector3) nextStep;
+                    if (wrap) wrap = false;
                 }
                 else
                 {

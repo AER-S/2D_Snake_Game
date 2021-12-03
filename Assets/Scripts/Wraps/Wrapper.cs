@@ -9,13 +9,10 @@ public class Wrapper : MonoBehaviour
     [SerializeField] private Wrapper twinWrapper;
     [SerializeField] private Vector2 direction;
 
-    private void OnCollisionEnter2D(Collision2D other)
+    
+    public Wrapper GetTwin()
     {
-        SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
-        if (snakePart)
-        {
-            snakePart.transform.position = twinWrapper.transform.position + (Vector3) twinWrapper.GetDirection();
-        }
+        return twinWrapper;
     }
 
     public Vector2 GetDirection()
