@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d59a3cfc941ce64b90b8c69fdf5ccfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snakePartPrefab: {fileID: 0}
-  snakePartsStartingNumber: 2
+  snakePartPrefab: {fileID: 4922639369547632496, guid: fb2b799a65c4e544b9b2593a2474f4ce, type: 3}
+  snakePartsStartingNumber: 10
+  growthStep: 20
+  speed: 0.33
 --- !u!114 &9182986338664212265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,3 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffd1682b621b3448a28c0ea8fae037c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 320
