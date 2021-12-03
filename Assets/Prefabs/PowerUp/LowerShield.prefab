@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7047783862435616584}
   - component: {fileID: 5820276605557712930}
   - component: {fileID: -3168192697716403575}
-  - component: {fileID: -1247411853086769024}
+  - component: {fileID: -1601422839524687497}
   m_Layer: 0
-  m_Name: Speed Limiter
+  m_Name: LowerShield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c3233d86bf1955e44895d8e574bb6904, type: 3}
-  m_Color: {r: 1, g: 0.971643, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.07363963, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 9, y: 9}
   m_EdgeRadius: 0
---- !u!114 &-1247411853086769024
+--- !u!114 &-1601422839524687497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2604403267358363985}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97cc8d04ee6e1d249b4c71067270e57e, type: 3}
+  m_Script: {fileID: 11500000, guid: dd7106c19f4728e4cbd92c6401267731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpTime: 10
-  speedFactor: 2
+  shieldName: LowerShield
+  value: 1

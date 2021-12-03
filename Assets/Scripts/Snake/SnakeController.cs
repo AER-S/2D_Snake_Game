@@ -15,6 +15,7 @@ public class SnakeController : MonoBehaviour
     private int score;
     private int lostScore;
     [SerializeField]private float speed;
+    private int shields;
     
 
     private static SnakeController instance;
@@ -122,6 +123,15 @@ public class SnakeController : MonoBehaviour
         AddNewSnakePart(snakeParts.Count,2 * snakeParts[snakeParts.Count-1].transform.position-snakeParts[snakeParts.Count-2].transform.position);
     }
 
+    void ReduceShields(int _damage)
+    {
+        shields -= _damage;
+        if (shields<0)
+        {
+            shields = 0;
+        }
+    }
+
     #endregion
 
     #region Public Functions
@@ -166,6 +176,16 @@ public class SnakeController : MonoBehaviour
 
     #endregion
 
+    public void HitSnake(string _obstacleName, int _damage)
+    {
+        if (shields>0)
+        {
+            ReduceShields(_damage);
+            Hit.Invoke(_obstacleName, _damage);
+            return;
+        }
+        KillSnake();
+    }
     public void KillSnake()
     {
         isAlive = false;
@@ -182,6 +202,11 @@ public class SnakeController : MonoBehaviour
     public void PowerUpSnake(string _powerUpName)
     {
         PowerUp.Invoke(_powerUpName);
+    }
+
+    public void AddShields(int _amount)
+    {
+        shields += _amount;
     }
     #endregion
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class BaseFood : MonoBehaviour,Food
 {
-    private FoodItem name;
+    private FoodItem foodName;
     private int foodValue;
 
     private void SetName(FoodItem _name)
     {
-        name = _name;
+        foodName = _name;
     }
 
     private void SetValue(int _amount)
@@ -19,7 +19,7 @@ public abstract class BaseFood : MonoBehaviour,Food
 
     public FoodItem GetName()
     {
-        return name;
+        return foodName;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
