@@ -1,15 +1,27 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseFood : MonoBehaviour,Food
 {
-    private FoodItem name;
+    private FoodItem foodName;
     private int foodValue;
+    private float lifeTime;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
+        if (snakePart)
+        {
+            FeedSnake();
+            Destroy(gameObject);
+        }
+    }
 
     private void SetName(FoodItem _name)
     {
-        name = _name;
+        foodName = _name;
     }
 
     private void SetValue(int _amount)
@@ -17,15 +29,14 @@ public abstract class BaseFood : MonoBehaviour,Food
         foodValue = _amount;
     }
 
-    public FoodItem GetName()
+    private void SetLifeTime(float _amount)
     {
-        return name;
+        lifeTime = _amount;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public FoodItem GetName()
     {
-        SnakePartController snakePart = other.gameObject.GetComponent<SnakePartController>();
-        if (snakePart) FeedSnake();
+        return foodName;
     }
 
     public int GetFoodValue()
@@ -33,11 +44,16 @@ public abstract class BaseFood : MonoBehaviour,Food
         return foodValue;
     }
 
+    private void Start()
+    {
+        Destroy(gameObject,lifeTime);
+    }
 
-    public BaseFood(FoodItem _name, int _foodvalue)
+    public BaseFood(FoodItem _name, int _foodvalue, float _lifeTime)
     {
         SetName(_name);
         SetValue(_foodvalue);
+        SetLifeTime(_lifeTime);
     }
     public abstract void FeedSnake();
 }
