@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7968098520407930123}
   - component: {fileID: 2511002561184074886}
   - component: {fileID: 5033394416042836624}
-  - component: {fileID: -6595066406221066747}
+  - component: {fileID: -9222561877893223870}
   m_Layer: 0
-  m_Name: Apple
+  m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.585551, g: 0.8490566, b: 0.31639373, a: 1}
+  m_Color: {r: 0.8509804, g: 0.3176471, b: 0.3176471, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -102,7 +102,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!114 &-6595066406221066747
+--- !u!114 &-9222561877893223870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 338412991410531718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8ffd0f9674ab1c4385f1aed76d61e14, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d51e32d8135e9c47bd61cb00f8781d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodValue: 10
+  foodValue: 20
   lifeTime: 60
-  growthPoints: 1
+  growthPoints: 2

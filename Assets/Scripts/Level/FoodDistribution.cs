@@ -1,11 +1,21 @@
 
+using System;
 using UnityEngine;
 
 [System.Serializable]
-public class FoodDistribution
+public class FoodDistribution : ICloneable
 {
    [SerializeField] private BaseFood food;
    [SerializeField] private int quantity;
+   
+
+   FoodDistribution(FoodDistribution _foodDistribution)
+   {
+      food = _foodDistribution.GetFood();
+      quantity = _foodDistribution.GetQuantity();
+   }
+
+   public FoodDistribution() {}
 
    public void DecreaseQuantity()
    {
@@ -21,5 +31,11 @@ public class FoodDistribution
    public int GetQuantity()
    {
       return quantity;
+   }
+
+   public object Clone()
+   {
+      FoodDistribution newObject = new FoodDistribution(this);
+      return newObject;
    }
 }

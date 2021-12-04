@@ -8,9 +8,9 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Level level;
     [SerializeField] private float foodSpawningTime;
-    private List<FoodDistribution> levelFoodDistributions;
-    private List<PowerUpDistribution> levelPowerUpDistributions;
-    private List<ObstaclesDistribution> levelObstaclesDistributions;
+    private List<FoodDistribution> levelFoodDistributions = new List<FoodDistribution>();
+    private List<PowerUpDistribution> levelPowerUpDistributions = new List<PowerUpDistribution>();
+    private List<ObstaclesDistribution> levelObstaclesDistributions = new List<ObstaclesDistribution>();
     private Vector2 grid = new Vector2(30, 14);
     private float foodTimeCounter;
     
@@ -35,9 +35,12 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        levelFoodDistributions = level.GetFoodDistributions();
-        levelPowerUpDistributions = level.GetPowerUpDistributions();
-        levelObstaclesDistributions = level.GetObstaclesDistributions();
+        //levelFoodDistributions = level.GetFoodDistributions();
+        CopyList<FoodDistribution>(levelFoodDistributions,level.GetFoodDistributions());
+        //levelPowerUpDistributions = level.GetPowerUpDistributions();
+        CopyList<PowerUpDistribution>(levelPowerUpDistributions,level.GetPowerUpDistributions());
+        //levelObstaclesDistributions = level.GetObstaclesDistributions();
+        CopyList<ObstaclesDistribution>(levelObstaclesDistributions, level.GetObstaclesDistributions());
         ResetFoodTimer();
     }
 
@@ -49,21 +52,25 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if (levelFoodDistributions.Count!=0)
-            {
-                int foodDistributionIndex = Random.Range(0, levelFoodDistributions.Count);
-                FoodDistribution foodDistribution = levelFoodDistributions[foodDistributionIndex];
-                SpawnFood(foodDistribution.GetFood());
-                levelFoodDistributions[foodDistributionIndex].DecreaseQuantity();
-                if (foodDistribution.GetQuantity()<=0)
-                {
-                    levelFoodDistributions.Remove(foodDistribution);
-                }
-            }
-            ResetFoodTimer();
+            HandleFoodDistribution();
         }
     }
 
+    void HandleFoodDistribution()
+    {
+        if (levelFoodDistributions.Count!=0)
+        {
+            int foodDistributionIndex = Random.Range(0, levelFoodDistributions.Count);
+            FoodDistribution foodDistribution = levelFoodDistributions[foodDistributionIndex];
+            SpawnFood(foodDistribution.GetFood());
+            levelFoodDistributions[foodDistributionIndex].DecreaseQuantity();
+            if (foodDistribution.GetQuantity()<=0)
+            {
+                levelFoodDistributions.Remove(foodDistribution);
+            }
+        }
+        ResetFoodTimer();
+    }
     void SpawnFood(BaseFood _food)
     {
         bool occupiedPosition = true;
@@ -96,4 +103,15 @@ public class LevelManager : MonoBehaviour
 
         return isInSnake;
     }
+
+    void CopyList<T>(List<T> _targetList, List<T> _originalList) where T: ICloneable,new()
+    {
+        foreach (T item in _originalList)
+        {
+            object newItem = item.Clone();
+            _targetList.Add((T)newItem);
+        }
+    }
 }
+
+
