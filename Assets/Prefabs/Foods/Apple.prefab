@@ -115,4 +115,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodValue: 10
-  lifeTime: 20
+  lifeTime: 60
+  growthPoints: 1

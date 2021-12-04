@@ -85,7 +85,7 @@ public class SnakeController : MonoBehaviour
 
     void CheckSnakePartsStartingNumber()
     {
-        snakePartsStartingNumber = (snakePartsStartingNumber < 1) ? 1 : snakePartsStartingNumber;
+        snakePartsStartingNumber = (snakePartsStartingNumber < 2) ? 2 : snakePartsStartingNumber;
     }
     void StartSnake()
     {
@@ -110,25 +110,20 @@ public class SnakeController : MonoBehaviour
         snakeParts.Remove(snakeParts[_index]);
     }
 
-    void UpdateScore(int _amount)
+    void UpdateAttribute(ref int _attribute,FoodType _foodType, int _amount)
     {
-        score += _amount;
-    }
-
-    private void UpdateGrowthPoints(FoodType _type)
-    {
-        switch (_type)
+        switch (_foodType)
         {
             case FoodType.MassGainer:
-                ++growthPoints;
+                _attribute += _amount;
                 break;
             case FoodType.MassBurner:
-                --growthPoints;
+                _attribute -= _amount;
                 break;
         }
     }
 
-    
+
 
     void HandleLength()
     {
@@ -191,12 +186,14 @@ public class SnakeController : MonoBehaviour
         Die.Invoke();
     }
 
-    public void EatFood(string _name, int _foodValue, FoodType _type)
+    public void EatFood(BaseFood _food, string _name)
     {
-        UpdateScore(_foodValue);
-        UpdateGrowthPoints(_type);
+        int foodValue = _food.GetFoodValue();
+        FoodType foodType = _food.GetFoodType();
+        UpdateAttribute(ref score, foodType, foodValue);
+        UpdateAttribute(ref growthPoints, foodType, _food.GetGrowthPoints());
         HandleLength();
-        Eat.Invoke(_name, _foodValue);
+        Eat.Invoke(_name, foodValue);
     }
 
     #endregion

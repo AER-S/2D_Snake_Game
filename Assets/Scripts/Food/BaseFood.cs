@@ -9,6 +9,7 @@ public abstract class BaseFood : MonoBehaviour,Food
     private FoodType foodType;
     [SerializeField] private int foodValue;
     [SerializeField] private float lifeTime;
+    [SerializeField] private int growthPoints;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -42,6 +43,12 @@ public abstract class BaseFood : MonoBehaviour,Food
     public FoodType GetFoodType()
     {
         return foodType;
+        
+    }
+
+    public int GetGrowthPoints()
+    {
+        return growthPoints;
         
     }
 

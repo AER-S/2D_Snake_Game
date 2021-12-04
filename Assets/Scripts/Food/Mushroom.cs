@@ -9,6 +9,6 @@ public class Mushroom : BaseFood
 
     public override void FeedSnake()
     {
-        SnakeController.Instance.EatFood("Mushroom",GetFoodValue(),GetFoodType());
+        SnakeController.Instance.EatFood(this,"Mushroom");
     }
 }

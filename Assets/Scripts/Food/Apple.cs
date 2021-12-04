@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Apple : BaseFood
@@ -9,6 +10,6 @@ public class Apple : BaseFood
 
     public override void FeedSnake()
     {
-        SnakeController.Instance.EatFood("Apple",GetFoodValue(),GetFoodType());
+        SnakeController.Instance.EatFood(this,"Apple");
     }
 }
