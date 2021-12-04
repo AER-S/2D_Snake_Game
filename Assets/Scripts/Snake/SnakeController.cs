@@ -100,6 +100,7 @@ public class SnakeController : MonoBehaviour
         }
         
         Rigidbody2D snakeHead = snakeParts[0].AddComponent<Rigidbody2D>();
+        snakeHead.gameObject.layer = 0;
         snakeHead.gravityScale = 0;
     }
     void AddNewSnakePart(int _index, Vector3 _position)
