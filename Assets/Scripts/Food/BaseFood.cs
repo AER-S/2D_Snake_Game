@@ -6,8 +6,9 @@ using UnityEngine;
 public abstract class BaseFood : MonoBehaviour,Food
 {
     private FoodItem foodName;
-    private int foodValue;
-    private float lifeTime;
+    private FoodType foodType;
+    [SerializeField] private int foodValue;
+    [SerializeField] private float lifeTime;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -24,16 +25,10 @@ public abstract class BaseFood : MonoBehaviour,Food
         foodName = _name;
     }
 
-    private void SetValue(int _amount)
+    private void SetType(FoodType _type)
     {
-        foodValue = _amount;
+        foodType = _type;
     }
-
-    private void SetLifeTime(float _amount)
-    {
-        lifeTime = _amount;
-    }
-
     public FoodItem GetName()
     {
         return foodName;
@@ -44,16 +39,21 @@ public abstract class BaseFood : MonoBehaviour,Food
         return foodValue;
     }
 
+    public FoodType GetFoodType()
+    {
+        return foodType;
+        
+    }
+
     private void Start()
     {
         Destroy(gameObject,lifeTime);
     }
 
-    public BaseFood(FoodItem _name, int _foodvalue, float _lifeTime)
+    public BaseFood(FoodItem _name, FoodType _type)
     {
         SetName(_name);
-        SetValue(_foodvalue);
-        SetLifeTime(_lifeTime);
+        SetType(_type);
     }
     public abstract void FeedSnake();
 }
