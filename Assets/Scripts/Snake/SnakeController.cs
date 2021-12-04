@@ -9,6 +9,7 @@ public class SnakeController : MonoBehaviour
     [SerializeField] private SnakePartController snakePartPrefab;
     [SerializeField] private int snakePartsStartingNumber = 2;
     [SerializeField] private int growthStep = 2;
+    [SerializeField] private float speed = 0.33f;
     private List<SnakePartController> snakeParts=new List<SnakePartController>();
     private float partSize;
     private bool isAlive;
@@ -16,6 +17,7 @@ public class SnakeController : MonoBehaviour
     private int lostScore;
     private int length;
     private int growthPoints;
+    
     
 
     private static SnakeController instance;
@@ -34,7 +36,9 @@ public class SnakeController : MonoBehaviour
     public event Action<int> Grow = delegate {  };
     public event Action<int> Shrink = delegate {  };
     public event Action<string,int> Hit = delegate(string _obstacleName, int _damage) {  };
-    public event Action<string> PowerUp = delegate(string _powerUpName) {  }; 
+    public event Action<string> PowerUp = delegate(string _powerUpName) {  };
+    
+    public event Action<float> SpeedChanged = delegate(float _newspeed) {  };
 
     #endregion
 
@@ -96,6 +100,7 @@ public class SnakeController : MonoBehaviour
         }
         
         Rigidbody2D snakeHead = snakeParts[0].AddComponent<Rigidbody2D>();
+        snakeHead.gameObject.layer = 0;
         snakeHead.gravityScale = 0;
     }
     void AddNewSnakePart(int _index, Vector3 _position)
@@ -156,6 +161,16 @@ public class SnakeController : MonoBehaviour
 
     #region Public Functions
 
+    #region Setters
+
+    public void SetSpeed(float _amount)
+    {
+        speed = _amount;
+        SpeedChanged.Invoke(_amount);
+    }
+
+    #endregion
+
     #region Getters
 
     public float GetStepSize()
@@ -178,6 +193,12 @@ public class SnakeController : MonoBehaviour
         return snakePartPrefab.GetComponent<BoxCollider2D>().size*snakePartPrefab.transform.localScale;
     }
 
+    public float GetSpeed()
+    {
+        return speed;
+        
+    }
+
     #endregion
 
     public void KillSnake()
@@ -197,4 +218,9 @@ public class SnakeController : MonoBehaviour
     }
 
     #endregion
+
+    public void PowerUpSnake(string _powerUpName)
+    {
+        PowerUp.Invoke(_powerUpName);
+    }
 }

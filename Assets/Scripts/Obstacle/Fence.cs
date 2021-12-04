@@ -8,6 +8,7 @@ public class Fence : BaseObstacle
 
     public override void HinderSnake()
     {
+        Debug.Log("Hit Fence");
         SnakeController.Instance.KillSnake();
     }
 }
