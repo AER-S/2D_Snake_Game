@@ -7,6 +7,12 @@ public enum FoodItem
     apple,
     mushroom
 }
+
+public enum FoodType
+{
+    MassGainer,
+    MassBurner
+}
 public interface Food
 {
     void FeedSnake();
