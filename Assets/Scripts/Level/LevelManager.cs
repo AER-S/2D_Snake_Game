@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     private List<ObstaclesDistribution> levelObstaclesDistributions = new List<ObstaclesDistribution>();
     private Vector2 grid = new Vector2(30, 14);
     private float foodTimeCounter;
+    private List<Vector3> availablePositions = new List<Vector3>();
     
     private LevelManager instance;
     public LevelManager Instance
@@ -42,6 +43,7 @@ public class LevelManager : MonoBehaviour
         //levelObstaclesDistributions = level.GetObstaclesDistributions();
         CopyList<ObstaclesDistribution>(levelObstaclesDistributions, level.GetObstaclesDistributions());
         ResetFoodTimer();
+        ResetAvailablePositions();
     }
 
     private void Update()
@@ -55,6 +57,22 @@ public class LevelManager : MonoBehaviour
             HandleFoodDistribution();
         }
     }
+
+    void ResetAvailablePositions()
+    {
+        int withHalf = (int)grid.x / 2;
+        int heightHalf = (int) grid.y / 2;
+        availablePositions.Clear();
+        for (int i = -withHalf; i <= withHalf; i++)
+        {
+            for (int j =-heightHalf ; j <= heightHalf; j++)
+            {
+                availablePositions.Add(new Vector3(i,j,0));
+            }
+            
+        }
+    }
+    
 
     void HandleFoodDistribution()
     {
@@ -73,37 +91,33 @@ public class LevelManager : MonoBehaviour
     }
     void SpawnFood(BaseFood _food)
     {
-        bool occupiedPosition = true;
-        Vector2 spawnPosition =Vector2.zero;
-        while (occupiedPosition)
-        {
-            int xPos = (int)Random.Range(-grid.x / 2, grid.x / 2);
-            int yPos = (int)Random.Range(-grid.y / 2, grid.y / 2);
-            spawnPosition = new Vector2(xPos, yPos);
-            occupiedPosition = CheckIfInSnake(spawnPosition);
-        }
-
+        ResetAvailablePositions();
+        RemoveSnakePositions();
+        Vector3 spawnPosition = ChooseARandomAvailablePosition();
         Instantiate(_food, spawnPosition, Quaternion.identity);
+    }
+
+    private Vector3 ChooseARandomAvailablePosition()
+    {
+        int range = availablePositions.Count;
+        int index = Random.Range(0, range);
+        return availablePositions[index];
+    }
+
+    private void RemoveSnakePositions()
+    {
+        List<SnakePartController> snakeParts = SnakeController.Instance.GetSnakeParts();
+        foreach (SnakePartController snakePart in snakeParts)
+        {
+            availablePositions.Remove(snakePart.transform.position);
+        }
     }
 
     void ResetFoodTimer()
     {
         foodTimeCounter = foodSpawningTime;
     }
-
-    bool CheckIfInSnake(Vector2 _position)
-    {
-        bool isInSnake = false;
-        List<SnakePartController> snakeParts = SnakeController.Instance.GetSnakeParts();
-        foreach (SnakePartController snakePart in snakeParts)
-        {
-            Vector3 snakePartPosition = snakePart.transform.position;
-            isInSnake = (snakePartPosition.x - _position.x < 0.001f && snakePartPosition.y - _position.y < 0.001f);
-            if (isInSnake) break;
-        }
-
-        return isInSnake;
-    }
+    
 
     void CopyList<T>(List<T> _targetList, List<T> _originalList) where T: ICloneable,new()
     {
