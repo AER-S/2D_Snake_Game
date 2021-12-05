@@ -71,7 +71,9 @@ public class SnakeMovementsController : MonoBehaviour
     {
         Vector3 headPos3D = snakeParts[0].transform.position;
         Vector2 headPos2D = new Vector2(headPos3D.x, headPos3D.y);
-        RaycastHit2D objectAhead = Physics2D.BoxCast(headPos2D, new Vector2(headColliderBounds.x, headColliderBounds.y),
+
+        RaycastHit2D objectAhead = Physics2D.BoxCast(headPos2D, new Vector2(headColliderBounds.x, headColliderBounds.y)* 0.5f,
+
             0f, direction, 1f,
             obstacleLayerMask);
         if (objectAhead)
