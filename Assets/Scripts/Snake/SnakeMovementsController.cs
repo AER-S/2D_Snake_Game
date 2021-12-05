@@ -105,21 +105,14 @@ public class SnakeMovementsController : MonoBehaviour
         {
             lockedDirection = direction;
             Vector3 swapPosition = snakeParts[0].transform.position;
-            foreach (SnakePartController snakePart in snakeParts)
-            {
-                int index = snakeParts.IndexOf(snakePart);
-                Vector3 position = snakePart.transform.position;
-                if (index ==0)
-                {
-                    Vector2 nextStep = direction * snake.GetStepSize();
-                    snakePart.transform.position += (Vector3) nextStep;
-                }
-                else
-                {
-                    snakePart.transform.position = swapPosition;
-                    swapPosition = position;
-                }
-            }
+            snakeParts[0].transform.position += (Vector3) (direction * snake.GetStepSize());
+            SnakePartController lastSnakePart = snakeParts[^1];
+            snakeParts.RemoveAt(snakeParts.Count-1);
+            
+            lastSnakePart.transform.position = swapPosition;
+            
+            snakeParts.Insert(1,lastSnakePart);
+            
         }
     }
 
