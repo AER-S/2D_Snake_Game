@@ -9,6 +9,7 @@ public class SnakeMovementsController : MonoBehaviour
     [SerializeField] private LayerMask obstacleLayerMask;
     private InputMaster controls;
     private Vector2 direction;
+    private Vector2 lockedDirection;
     private SnakeController snake;
     private List<SnakePartController> snakeParts;
     private Vector3 headColliderBounds;
@@ -37,6 +38,7 @@ public class SnakeMovementsController : MonoBehaviour
     private void Start()
     {
         direction = Vector2.right;
+        lockedDirection = direction;
         snake = SnakeController.Instance;
         snakeParts = snake.GetSnakeParts();
         headColliderBounds = snake.GetBounds();
@@ -60,7 +62,7 @@ public class SnakeMovementsController : MonoBehaviour
 
     private void GetNewDirection(Vector2 _newDirection)
     {
-        if (Math.Abs(_newDirection.x - -direction.x) < 0.001f || Math.Abs(_newDirection.y - -direction.y) < 0.001f) return;
+        if (Math.Abs(_newDirection.x +lockedDirection.x) < 0.001f || Math.Abs(_newDirection.y +lockedDirection.y) < 0.001f) return;
         direction = _newDirection;
     }
 
@@ -94,6 +96,7 @@ public class SnakeMovementsController : MonoBehaviour
 
         if (snake.GetIsAlive())
         {
+            lockedDirection = direction;
             Vector3 swapPosition = snakeParts[0].transform.position;
             foreach (SnakePartController snakePart in snakeParts)
             {
