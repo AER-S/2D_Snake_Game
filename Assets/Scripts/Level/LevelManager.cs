@@ -99,6 +99,7 @@ public class LevelManager : MonoBehaviour
         {
             Vector3 snakePartPosition = snakePart.transform.position;
             isInSnake = (snakePartPosition.x - _position.x < 0.001f && snakePartPosition.y - _position.y < 0.001f);
+            if (isInSnake) break;
         }
 
         return isInSnake;
