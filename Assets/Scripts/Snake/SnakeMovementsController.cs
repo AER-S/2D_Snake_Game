@@ -152,7 +152,7 @@ public class SnakeMovementsController : MonoBehaviour
             lastSnakePart.transform.position = swapPosition;
             
             snakeParts.Insert(1,lastSnakePart);
-            
+            wrap = false;
         }
     }
 
