@@ -2,7 +2,7 @@ public enum PowerUpItem
 {
     speedLimiter,
     Shield,
-    shrinker
+    ScoreBooster
 }
 
 public interface PowerUp

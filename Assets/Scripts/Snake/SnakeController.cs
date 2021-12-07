@@ -21,6 +21,7 @@ public class SnakeController : MonoBehaviour
 
     private int length;
     private int growthPoints;
+    private bool scoreBoost;
     
 
     
@@ -70,10 +71,12 @@ public class SnakeController : MonoBehaviour
     {
         isAlive = true;
         score = 0;
+        scoreBoost = false;
         length = snakePartsStartingNumber;
         growthPoints = 0;
         CheckSnakePartsStartingNumber();
         StartSnake();
+        
     }
 
     private void OnEnable()
@@ -233,8 +236,8 @@ public class SnakeController : MonoBehaviour
 
     public void EatFood(BaseFood _food, string _name)
     {
-        int foodValue = _food.GetFoodValue();
         FoodType foodType = _food.GetFoodType();
+        int foodValue = _food.GetFoodValue() * ((scoreBoost&&foodType == FoodType.MassGainer)?2:1);
         UpdateAttribute(ref score, foodType, foodValue);
         UpdateAttribute(ref growthPoints, foodType, _food.GetGrowthPoints());
         HandleLength();
@@ -252,6 +255,22 @@ public class SnakeController : MonoBehaviour
     public void AddShields(int _amount)
     {
         shields += _amount;
+    }
+
+    public void BoostScore()
+    {
+        if (!scoreBoost)
+        {
+            scoreBoost = true;
+        }
+    }
+
+    public void StopBoostScore()
+    {
+        if (scoreBoost)
+        {
+            scoreBoost = false;
+        }
     }
     #endregion
 
