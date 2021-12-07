@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour
     private float foodTimeCounter;
     private float powerUpTimeCounter;
     private List<Vector3> availablePositions = new List<Vector3>();
+
+    private SnakeController snake;
     
     private LevelManager instance;
     public LevelManager Instance
@@ -47,6 +49,7 @@ public class LevelManager : MonoBehaviour
         ResetTimer(ref foodTimeCounter,foodSpawningTime,foodSpawingTimeRange);
         ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime,foodSpawningTime);
         ResetAvailablePositions();
+        snake = SnakeController.Instance;
     }
 
     private void Update()
@@ -90,7 +93,7 @@ public class LevelManager : MonoBehaviour
     {
         if (levelFoodDistributions.Count!=0)
         {
-            int foodDistributionIndex = Random.Range(0, levelFoodDistributions.Count);
+            int foodDistributionIndex =(snake.GetLength()<=4)?ChooseMassGainer():Random.Range(0, levelFoodDistributions.Count);
             FoodDistribution foodDistribution = levelFoodDistributions[foodDistributionIndex];
             SpawnItem(foodDistribution.GetFood());
             levelFoodDistributions[foodDistributionIndex].DecreaseQuantity();
@@ -101,12 +104,14 @@ public class LevelManager : MonoBehaviour
         }
         ResetTimer(ref foodTimeCounter,foodSpawningTime, foodSpawingTimeRange);
     }
+    
+    
 
     void HandlePowerUpsDistribution()
     {
         if (levelPowerUpDistributions.Count!=0)
         {
-            int powerUpsDistributionIndex = Random.Range(0, levelPowerUpDistributions.Count);
+            int powerUpsDistributionIndex =Random.Range(0, levelPowerUpDistributions.Count);
             PowerUpDistribution powerUpDistribution = levelPowerUpDistributions[powerUpsDistributionIndex];
             SpawnItem(powerUpDistribution.GetPowerUp());
             levelPowerUpDistributions[powerUpsDistributionIndex].DecreaseQuantity();
@@ -124,8 +129,22 @@ public class LevelManager : MonoBehaviour
         Vector3 spawnPosition = ChooseARandomAvailablePosition();
         Instantiate(_food, spawnPosition, Quaternion.identity);
     }
-    
-    
+
+    int ChooseMassGainer()
+    {
+        List<FoodDistribution> gainers = new List<FoodDistribution>();
+        foreach (FoodDistribution foodDistribution in levelFoodDistributions)
+        {
+            BaseFood food = foodDistribution.GetFood();
+            if (food.GetFoodType()==FoodType.MassGainer)
+            {
+                gainers.Add(foodDistribution);
+            }
+        }
+
+        FoodDistribution choosenFoodDistribution = gainers[Random.Range(0, gainers.Count)];
+        return levelFoodDistributions.IndexOf(choosenFoodDistribution);
+    }
 
     private Vector3 ChooseARandomAvailablePosition()
     {
@@ -136,7 +155,7 @@ public class LevelManager : MonoBehaviour
 
     private void RemoveSnakePositions()
     {
-        List<SnakePartController> snakeParts = SnakeController.Instance.GetSnakeParts();
+        List<SnakePartController> snakeParts = snake.GetSnakeParts();
         foreach (SnakePartController snakePart in snakeParts)
         {
             availablePositions.Remove(snakePart.transform.position);

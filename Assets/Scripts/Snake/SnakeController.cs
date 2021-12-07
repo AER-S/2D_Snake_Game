@@ -217,6 +217,11 @@ public class SnakeController : MonoBehaviour
         
     }
 
+    public int GetLength()
+    {
+        return snakeParts.Count;
+    }
+
     #endregion
 
     public void HitSnake(string _obstacleName, int _damage)
