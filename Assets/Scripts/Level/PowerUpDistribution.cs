@@ -31,6 +31,11 @@ public class PowerUpDistribution : ICloneable
         return quantity;
     }
 
+    public void DecreaseQuantity()
+    {
+        --quantity;
+    }
+
     public object Clone()
     {
         PowerUpDistribution newItem = new PowerUpDistribution(this);
