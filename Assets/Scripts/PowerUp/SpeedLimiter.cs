@@ -8,28 +8,29 @@ public class SpeedLimiter : BasePowerUp
     [SerializeField] private float speedFactor;
     private SnakeController snake;
 
-    private void Start()
-    {
-        snake = SnakeController.Instance;
-    }
+    
 
     public SpeedLimiter() : base(PowerUpItem.speedLimiter) {}
 
     public override void BoostSnake()
     {
-        snake.PowerUpSnake("SpeedLimiter");
-        StartCoroutine(SlowDownSnake(powerUpTime, speedFactor));
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<BoxCollider2D>().enabled = false;
+        snake = SnakeController.Instance;
+        
+        StartCoroutine(SlowDownSnake());
+        
     }
 
-    IEnumerator SlowDownSnake(float _time, float _factor)
+    IEnumerator SlowDownSnake()
     {
+        snake.PowerUpSnake("SpeedLimiter");
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
         float currentSpeed = snake.GetSpeed();
-        float newSpeed = currentSpeed * _factor;
+        float newSpeed = currentSpeed * speedFactor;
         snake.SetSpeed(newSpeed);
-        yield return new WaitForSecondsRealtime(_time);
+        yield return new WaitForSecondsRealtime(powerUpTime);
         snake.SetSpeed(currentSpeed);
+        snake.CoolDownFromPowerUP(GetCoolDownTime());
         Destroy(gameObject);
     }
 }

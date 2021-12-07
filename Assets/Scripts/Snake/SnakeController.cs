@@ -43,7 +43,8 @@ public class SnakeController : MonoBehaviour
     public event Action<int> Shrink = delegate {  };
     public event Action<string,int> Hit = delegate(string _obstacleName, int _damage) {  };
     public event Action<string> PowerUp = delegate(string _powerUpName) {  };
-    
+
+    public event Action<float> CoolDown = delegate(float _cooldownTime) { };
     public event Action<float> SpeedChanged = delegate(float _newspeed) {  };
 
     #endregion
@@ -271,6 +272,11 @@ public class SnakeController : MonoBehaviour
         {
             scoreBoost = false;
         }
+    }
+
+    public void CoolDownFromPowerUP(float _time)
+    {
+        CoolDown.Invoke(_time);
     }
     #endregion
 

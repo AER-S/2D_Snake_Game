@@ -12,8 +12,10 @@ public class Shield : BasePowerUp
 
     public override void BoostSnake()
     {
-        SnakeController.Instance.PowerUpSnake(shieldName);
-        SnakeController.Instance.AddShields(value);
+        SnakeController snake = SnakeController.Instance;
+        snake.PowerUpSnake(shieldName);
+        snake.AddShields(value);
+        snake.CoolDownFromPowerUP(GetCoolDownTime());
         Destroy(gameObject);
     }
 }

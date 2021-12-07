@@ -124,5 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cc8d04ee6e1d249b4c71067270e57e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coolDownTime: 10
   powerUpTime: 10
   speedFactor: 2
