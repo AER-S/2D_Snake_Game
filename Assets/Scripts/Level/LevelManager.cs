@@ -8,7 +8,9 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Level level;
     [SerializeField] private float foodSpawningTime;
+    [SerializeField] private float foodSpawingTimeRange;
     [SerializeField] private float powerUpSpawingTime;
+    [SerializeField] private float powerUpSpawingTimeRange;
     private List<FoodDistribution> levelFoodDistributions = new List<FoodDistribution>();
     private List<PowerUpDistribution> levelPowerUpDistributions = new List<PowerUpDistribution>();
     private List<ObstaclesDistribution> levelObstaclesDistributions = new List<ObstaclesDistribution>();
@@ -38,14 +40,12 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        //levelFoodDistributions = level.GetFoodDistributions();
-        CopyList<FoodDistribution>(levelFoodDistributions,level.GetFoodDistributions());
-        //levelPowerUpDistributions = level.GetPowerUpDistributions();
-        CopyList<PowerUpDistribution>(levelPowerUpDistributions,level.GetPowerUpDistributions());
-        //levelObstaclesDistributions = level.GetObstaclesDistributions();
-        CopyList<ObstaclesDistribution>(levelObstaclesDistributions, level.GetObstaclesDistributions());
-        ResetTimer(ref foodTimeCounter,foodSpawningTime);
-        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime);
+        
+        CopyList(levelFoodDistributions,level.GetFoodDistributions());
+        CopyList(levelPowerUpDistributions,level.GetPowerUpDistributions());
+        CopyList(levelObstaclesDistributions, level.GetObstaclesDistributions());
+        ResetTimer(ref foodTimeCounter,foodSpawningTime,foodSpawingTimeRange);
+        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime,foodSpawningTime);
         ResetAvailablePositions();
     }
 
@@ -99,7 +99,7 @@ public class LevelManager : MonoBehaviour
                 levelFoodDistributions.Remove(foodDistribution);
             }
         }
-        ResetTimer(ref foodTimeCounter,foodSpawningTime);
+        ResetTimer(ref foodTimeCounter,foodSpawningTime, foodSpawingTimeRange);
     }
 
     void HandlePowerUpsDistribution()
@@ -115,7 +115,7 @@ public class LevelManager : MonoBehaviour
                 levelPowerUpDistributions.Remove(powerUpDistribution);
             }
         }
-        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime);
+        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime, powerUpSpawingTimeRange);
     }
     void SpawnItem<T>(T _food) where T : MonoBehaviour
     {
@@ -143,9 +143,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void ResetTimer(ref float _timer, float _resetValue)
+    void ResetTimer(ref float _timer, float _resetValue, float _range)
     {
-        _timer = _resetValue;
+        _timer = _resetValue + Random.Range(-1f, 1f) * _range * 0.5f;
     }
 
     void RunTimer(ref float _timer)
