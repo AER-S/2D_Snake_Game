@@ -10,6 +10,8 @@ public class LobbyController : MonoBehaviour
     [SerializeField] private Button multiplayerButton;
     [SerializeField] private Button quitButton;
 
+    [SerializeField] private CampaignPanelController campaignPanel;
+
     private void OnEnable()
     {
         campaignButton.onClick.AddListener(GoToCampaignPanel);
@@ -23,8 +25,12 @@ public class LobbyController : MonoBehaviour
         multiplayerButton.onClick.RemoveListener(GoToMultiplayerSettingsPanel);
         quitButton.onClick.RemoveListener(QuitGame);
     }
-    
-    public void GoToCampaignPanel(){}
+
+    public void GoToCampaignPanel()
+    {
+        campaignPanel.gameObject.SetActive(true);
+        gameObject.SetActive(false);
+    }
     public void GoToMultiplayerSettingsPanel(){}
 
     public void QuitGame()
