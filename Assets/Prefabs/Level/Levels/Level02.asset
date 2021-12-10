@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c1753992f0925408911043909d194f, type: 3}
+  m_Name: Level02
+  m_EditorClassIdentifier: 
+  index: 0
+  foodDistributions: []
+  powerUpDistributions: []
+  obstaclesDistributions: []
+  objectives:
+    objective_1:
+      type: 1
+      _objective:
+        rid: 3556876354412085266
+    objective_2:
+      type: 1
+      _objective:
+        rid: 3556876354412085267
+    objective_3:
+      type: 1
+      _objective:
+        rid: 3556876354412085268
+  references:
+    version: 2
+    RefIds:
+    - rid: 3556876354412085266
+      type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
+      data:
+        Complete: 0
+        length: 0
+    - rid: 3556876354412085267
+      type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
+      data:
+        Complete: 0
+        length: 0
+    - rid: 3556876354412085268
+      type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
+      data:
+        Complete: 0
+        length: 0
