@@ -1,31 +1,47 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelManager : MonoBehaviour
+public class LevelAdministrator : MonoBehaviour
 {
-    [SerializeField] private Level level;
-    [SerializeField] private float foodSpawningTime;
-    [SerializeField] private float foodSpawingTimeRange;
-    [SerializeField] private float powerUpSpawingTime;
-    [SerializeField] private float powerUpSpawingTimeRange;
+    [SerializeField] private Level[] level = new Level[10];
     private List<FoodDistribution> levelFoodDistributions = new List<FoodDistribution>();
     private List<PowerUpDistribution> levelPowerUpDistributions = new List<PowerUpDistribution>();
     private List<ObstaclesDistribution> levelObstaclesDistributions = new List<ObstaclesDistribution>();
+    private BaseObjective[] levelObjectives = new BaseObjective[3];
+
+    private int levelIndex;
+    private float foodSpawningTime;
+    private float foodSpawingTimeRange;
+    private float powerUpSpawingTime;
+    private float powerUpSpawingTimeRange;
+    private float levelTime;
+    private bool levelOnGoing;
+    private SnakeController snake;
+
+    private InputMaster controls;
+
     private Vector2 grid = new Vector2(30, 14);
     private float foodTimeCounter;
     private float powerUpTimeCounter;
+    private float levelTimeCounter;
     private List<Vector3> availablePositions = new List<Vector3>();
-
-    private SnakeController snake;
     
-    private LevelManager instance;
-    public LevelManager Instance
-    {
-        get { return instance; }
-    }
+    public static event Action Pause = delegate {  };
+    
+    public static event Action Continue = delegate {  };
+    
+    public static event Action Finish = delegate {  };
+    
+    public static event Action Starting = delegate {  };
+    
+    
+    private LevelAdministrator instance;
+    public LevelAdministrator Instance => instance;
+    //public LevelAdministrator instance;
 
     private void Awake()
     {
@@ -40,37 +56,84 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        controls.Enable();
+        controls.Snake.Pause.performed += ct => PauseGame();
+        Starting += InitializeLevel;
+        Finish += FinishLevel;
+        
+    }
+
+    private void OnDisable()
+    {
+        if (controls!=null)
+        {
+            controls.Snake.Pause.performed -= ct => PauseGame();
+        }
+        Starting += InitializeLevel;
+        Finish -= FinishLevel;
+    }
+
     private void Start()
     {
-        
-        CopyList(levelFoodDistributions,level.GetFoodDistributions());
-        CopyList(levelPowerUpDistributions,level.GetPowerUpDistributions());
-        CopyList(levelObstaclesDistributions, level.GetObstaclesDistributions());
-        ResetTimer(ref foodTimeCounter,foodSpawningTime,foodSpawingTimeRange);
-        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime,foodSpawningTime);
-        ResetAvailablePositions();
-        snake = SnakeController.Instance;
+        levelIndex = PlayerPrefs.GetInt("levelToLoad", 0);
+        InitializeLevel();
     }
+    
 
     private void Update()
     {
-        if (foodTimeCounter>0)
+        if (levelOnGoing)
         {
-            RunTimer(ref foodTimeCounter);
-        }
-        else
-        {
-            HandleFoodDistribution();
-        }
+            if (foodTimeCounter>0)
+            {
+                RunTimer(ref foodTimeCounter);
+            }
+            else
+            {
+                HandleFoodDistribution();
+            }
 
-        if (powerUpTimeCounter>0)
-        {
-            RunTimer(ref powerUpTimeCounter);
+            if (powerUpTimeCounter>0)
+            {
+                RunTimer(ref powerUpTimeCounter);
+            }
+            else
+            {
+                HandlePowerUpsDistribution();
+            }
+
+            if (levelTimeCounter>0)
+            {
+                RunTimer(ref levelTimeCounter);
+            }
+            else
+            {
+                Finish.Invoke();
+            }
         }
-        else
-        {
-            HandlePowerUpsDistribution();
-        }
+    }
+
+    public void InitializeLevel()
+    {
+        Level theLevel = this.level[levelIndex];
+        CopyList(levelFoodDistributions,theLevel.GetFoodDistributions());
+        CopyList(levelPowerUpDistributions,theLevel.GetPowerUpDistributions());
+        CopyList(levelObstaclesDistributions, theLevel.GetObstaclesDistributions());
+        levelTime = theLevel.GetTime();
+        foodSpawningTime = theLevel.GetFoodSpawningTime();
+        foodSpawingTimeRange = theLevel.GetFoodSpawningTimeRange();
+        ResetTimer(ref foodTimeCounter,foodSpawningTime,foodSpawingTimeRange);
+        powerUpSpawingTime = theLevel.GetPowerUpSpawningTime();
+        powerUpSpawingTimeRange = theLevel.GetPowerUpSpawningTimeRange();
+        ResetTimer(ref powerUpTimeCounter, powerUpSpawingTime,foodSpawningTime);
+        ResetTimer(ref levelTimeCounter, levelTime,0.1f);
+        ResetAvailablePositions();
+        snake = SnakeController.Instance;
+        levelObjectives = level[levelIndex].GetObjectives();
+
+        levelOnGoing = true;
     }
 
     void ResetAvailablePositions()
@@ -87,7 +150,11 @@ public class LevelManager : MonoBehaviour
             
         }
     }
-    
+
+    void FinishLevel()
+    {
+        snake.StopSnake();
+    }
 
     void HandleFoodDistribution()
     {
@@ -180,6 +247,16 @@ public class LevelManager : MonoBehaviour
             object newItem = item.Clone();
             _targetList.Add((T)newItem);
         }
+    }
+
+    void PauseGame()
+    {
+        Pause.Invoke();
+    }
+
+    void ContinueGame()
+    {
+        Continue.Invoke();
     }
 }
 
