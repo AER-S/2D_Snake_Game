@@ -13,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "23ebcd64-ac80-487d-910f-8d1cc27ef314",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -135,6 +144,17 @@
                     "groups": "",
                     "action": "Movments",
                     "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0f29432-51d1-4fb7-9351-d908cdca768e",
+                    "path": "<Keyboard>/#(P)",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Pause",
+                    "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]

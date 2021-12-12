@@ -1,13 +1,12 @@
 
 
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScoreBooster : BasePowerUp
 {
     [SerializeField] private float boostTime;
-    private SnakeController snake;
+    
     
     public ScoreBooster() : base(PowerUpItem.ScoreBooster)
     {
@@ -16,14 +15,14 @@ public class ScoreBooster : BasePowerUp
 
     public override void BoostSnake()
     {
-        snake = SnakeController.Instance;
+        
         StartCoroutine(BoostScore());
 
     }
 
     IEnumerator BoostScore()
     {
-        snake.PowerUpSnake("ScoreBooster");
+        snake.PowerUpSnake(this,"ScoreBooster");
         GetComponent<BoxCollider2D>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
         snake.BoostScore();

@@ -12,38 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c1753992f0925408911043909d194f, type: 3}
   m_Name: Level02
   m_EditorClassIdentifier: 
-  index: 0
-  foodDistributions: []
-  powerUpDistributions: []
+  index: 2
+  time: 60
+  foodSpawningTime: 10
+  foodSpawningTimeRange: 5
+  foodDistributions:
+  - food: {fileID: -6595066406221066747, guid: 2f8faac4ef756fb40b281cbb1a3a6e1a, type: 3}
+    quantity: 20
+  - food: {fileID: -9222561877893223870, guid: b5c8f06792524c245b2cd55fe8fca663, type: 3}
+    quantity: 5
+  powerUpSpawningTime: 20
+  powerUpSpawningTimeRange: 10
+  powerUpDistributions:
+  - powerUp: {fileID: -1247411853086769024, guid: 4919d9058bf1b2a4082a03a80930ec75, type: 3}
+    quantity: 3
   obstaclesDistributions: []
   objectives:
     objective_1:
-      type: 1
+      type: 0
       _objective:
-        rid: 3556876354412085266
+        rid: 3556876354412085486
     objective_2:
       type: 1
       _objective:
-        rid: 3556876354412085267
+        rid: 3556876354412085487
     objective_3:
-      type: 1
+      type: 3
       _objective:
-        rid: 3556876354412085268
+        rid: 3556876354412085488
   references:
     version: 2
     RefIds:
-    - rid: 3556876354412085266
+    - rid: 3556876354412085486
+      type: {class: EatXFoodNTimes, ns: , asm: Assembly-CSharp}
+      data:
+        foodItem: 0
+        nTimes: 4
+    - rid: 3556876354412085487
       type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
       data:
-        Complete: 0
-        length: 0
-    - rid: 3556876354412085267
-      type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
+        length: 10
+    - rid: 3556876354412085488
+      type: {class: StayAliveForXTime, ns: , asm: Assembly-CSharp}
       data:
-        Complete: 0
-        length: 0
-    - rid: 3556876354412085268
-      type: {class: ReachXLength, ns: , asm: Assembly-CSharp}
-      data:
-        Complete: 0
-        length: 0
+        objectiveTime: 50

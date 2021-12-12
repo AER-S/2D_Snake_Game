@@ -1,15 +1,15 @@
 
 using UnityEngine;
 [System.Serializable]
-public class EatXFoodNTimes : BaseObjective
+public class EatXPowerUpNTimes : BaseObjective
 {
-    [SerializeField] private FoodItem foodItem;
+    [SerializeField] private PowerUpItem powerUpItem;
     [SerializeField] private int nTimes;
 
     private SnakeController snake;
     private int currentEaten;
 
-    public EatXFoodNTimes()
+    public EatXPowerUpNTimes()
     {
         currentEaten = 0;
     }
@@ -22,23 +22,23 @@ public class EatXFoodNTimes : BaseObjective
 
     public override string Describe()
     {
-        return "Eat " + nTimes + " pieces of " + foodItem + ": " + currentEaten + "/" + nTimes;
+        return "Eat " + nTimes + " pieces of " + powerUpItem + ": " + currentEaten + "/" + nTimes;
     }
 
     public override void Subscribe()
     {
         snake = SnakeController.Instance;
-        snake.Eat += CheckEatenFood;
+        snake.PowerUp += CheckEatenFood;
     }
 
     public override void Unsubscribe()
     {
-        snake.Eat -= CheckEatenFood;
+        snake.PowerUp -= CheckEatenFood;
     }
 
-    public void CheckEatenFood(BaseFood _eatenFood, string _foodName)
+    public void CheckEatenFood(BasePowerUp _eatenPowerUp, string _foodName)
     {
-        if (_eatenFood.GetFoodName()==foodItem)
+        if (_eatenPowerUp.GetItem()==powerUpItem)
         {
             currentEaten++;
         }

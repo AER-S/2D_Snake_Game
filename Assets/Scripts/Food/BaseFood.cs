@@ -32,9 +32,10 @@ public abstract class BaseFood : MonoBehaviour,Food
         foodType = _type;
     }
 
-    
-
-    
+    public FoodItem GetFoodName()
+    {
+        return foodName;
+    }
 
     public int GetFoodValue()
     {

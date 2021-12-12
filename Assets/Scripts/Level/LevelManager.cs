@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelAdministrator : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Level[] level = new Level[10];
     private List<FoodDistribution> levelFoodDistributions = new List<FoodDistribution>();
@@ -39,12 +37,13 @@ public class LevelAdministrator : MonoBehaviour
     public static event Action Starting = delegate {  };
     
     
-    private LevelAdministrator instance;
-    public LevelAdministrator Instance => instance;
-    //public LevelAdministrator instance;
+    private static LevelManager instance;
+    public static LevelManager Instance => instance;
+    
 
     private void Awake()
     {
+        
         if (!instance)
         {
             instance = this;
@@ -54,22 +53,24 @@ public class LevelAdministrator : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        controls = new InputMaster();
     }
 
     private void OnEnable()
     {
         controls.Enable();
-        controls.Snake.Pause.performed += ct => PauseGame();
+        controls.Snake.Pause.performed += _ => PauseGame();
         Starting += InitializeLevel;
         Finish += FinishLevel;
-        
     }
 
     private void OnDisable()
     {
         if (controls!=null)
         {
-            controls.Snake.Pause.performed -= ct => PauseGame();
+            controls.Snake.Pause.performed -= _ => PauseGame();
+            controls.Disable();
         }
         Starting += InitializeLevel;
         Finish -= FinishLevel;
@@ -77,13 +78,15 @@ public class LevelAdministrator : MonoBehaviour
 
     private void Start()
     {
-        levelIndex = PlayerPrefs.GetInt("levelToLoad", 0);
-        InitializeLevel();
+        //levelIndex = PlayerPrefs.GetInt("levelToLoad", 0);
+        levelIndex = 0;
+        Starting.Invoke();
     }
     
 
     private void Update()
     {
+        if (snake != SnakeController.Instance) snake = SnakeController.Instance;
         if (levelOnGoing)
         {
             if (foodTimeCounter>0)
@@ -115,8 +118,14 @@ public class LevelAdministrator : MonoBehaviour
         }
     }
 
+    public void SetLevelIndex(int _index)
+    {
+        levelIndex = _index;
+    }
+
     public void InitializeLevel()
     {
+        //levelIndex = PlayerPrefs.GetInt("levelToLoad", 0);
         Level theLevel = this.level[levelIndex];
         CopyList(levelFoodDistributions,theLevel.GetFoodDistributions());
         CopyList(levelPowerUpDistributions,theLevel.GetPowerUpDistributions());
@@ -132,8 +141,31 @@ public class LevelAdministrator : MonoBehaviour
         ResetAvailablePositions();
         snake = SnakeController.Instance;
         levelObjectives = level[levelIndex].GetObjectives();
-
+        RestartObjectives();
         levelOnGoing = true;
+    }
+
+    public void SetSnake(SnakeController _snakeController)
+    {
+        snake = _snakeController;
+    }
+
+    void RestartObjectives()
+    {
+        foreach (BaseObjective levelObjective in levelObjectives)
+        {
+            levelObjective.ResetObjective();
+            levelObjective.Subscribe();
+        }
+    }
+
+    void DeleteObjectives()
+    {
+        foreach (BaseObjective levelObjective in levelObjectives)
+        {
+            
+            levelObjective.Unsubscribe();
+        }
     }
 
     void ResetAvailablePositions()
@@ -153,7 +185,9 @@ public class LevelAdministrator : MonoBehaviour
 
     void FinishLevel()
     {
+        levelOnGoing = false;
         snake.StopSnake();
+        DeleteObjectives();
     }
 
     void HandleFoodDistribution()
@@ -249,15 +283,28 @@ public class LevelAdministrator : MonoBehaviour
         }
     }
 
-    void PauseGame()
+    public void PauseGame()
     {
-        Pause.Invoke();
+
+        if (levelOnGoing )
+        {
+            levelOnGoing = false;
+            Pause.Invoke();
+        }
     }
 
-    void ContinueGame()
+    public void ContinueGame()
     {
+        levelOnGoing = true;
         Continue.Invoke();
     }
+
+    public BaseObjective GetObjective(int _index)
+    {
+        return levelObjectives[_index];
+    }
+
+    public int GetLevelIndex() => levelIndex;
 }
 
 

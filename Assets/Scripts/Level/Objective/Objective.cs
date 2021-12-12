@@ -6,7 +6,8 @@ public enum ObjectiveType
     //None,
     eatXFoodNTimes,
     reachXLength,
-    gatherXPowerUpNTimes
+    eatXPowerUpNTimes,
+    StayAliveForXTime
 }
 
 
@@ -17,7 +18,7 @@ public class Objective
     
     [SerializeField] private ObjectiveType type;
     [SerializeReference] private BaseObjective _objective;
-    private ObjectiveType lasType;
+    private ObjectiveType lastType;
 
     public Objective()
     {
@@ -25,25 +26,35 @@ public class Objective
         Update();
     }
 
+    public BaseObjective GetObjective()
+    {
+        return _objective;
+    }
+
     public void Update()
     {
-        if (lasType!=type)
+        if (lastType!=type)
         {
             switch (type)
             {
-                /*case ObjectiveType.None:
-                    _objective = new BaseObjective();
-                    lasType = ObjectiveType.None;
-                    break;*/
-                
                 case ObjectiveType.eatXFoodNTimes:
                     _objective = new EatXFoodNTimes();
-                    lasType = ObjectiveType.eatXFoodNTimes;
+                    lastType = ObjectiveType.eatXFoodNTimes;
                     break;
                 
                 case ObjectiveType.reachXLength:
                     _objective = new ReachXLength();
-                    lasType = ObjectiveType.reachXLength;
+                    lastType = ObjectiveType.reachXLength;
+                    break;
+                
+                case ObjectiveType.eatXPowerUpNTimes:
+                    _objective = new EatXPowerUpNTimes();
+                    lastType = ObjectiveType.eatXPowerUpNTimes;
+                    break;
+                
+                case ObjectiveType.StayAliveForXTime:
+                    _objective = new StayAliveForXTime();
+                    lastType = ObjectiveType.StayAliveForXTime;
                     break;
             }
         }

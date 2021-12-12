@@ -1,9 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+
 
 [System.Serializable]
-public class BaseObjective 
+public abstract class BaseObjective 
 {
-    [SerializeField] private bool Complete;
+    protected bool complete;
+
+    public BaseObjective()
+    {
+        ResetObjective();
+    }
+
+    public abstract void ResetObjective();
+    
+    public void Complete()
+    {
+        complete = true;
+    }
+
+    public bool GetStatus()
+    {
+        return complete;
+    }
+
+    public abstract string Describe();
+    public abstract void Subscribe();
+    public abstract void Unsubscribe();
+    public abstract void UpdateStatus();
 }

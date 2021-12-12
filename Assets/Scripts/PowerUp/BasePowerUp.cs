@@ -6,18 +6,21 @@ using UnityEngine;
 public abstract class BasePowerUp : MonoBehaviour,PowerUp
 {
     [SerializeField] private float coolDownTime = 3f;
+
+    protected SnakeController snake;
     private PowerUpItem item;
     private bool powerUpStillRunning;
     private void OnEnable()
     {
-        SnakeController.Instance.CoolDown += CoolDown;
-        SnakeController.Instance.PowerUp += PowerUpRunning;
+        snake = SnakeController.Instance;
+        snake.CoolDown += CoolDown;
+        snake.PowerUp += PowerUpRunning;
     }
 
     private void OnDisable()
     {
-        SnakeController.Instance.CoolDown -= CoolDown;
-        SnakeController.Instance.PowerUp -= PowerUpRunning;
+        snake.CoolDown -= CoolDown;
+        snake.PowerUp -= PowerUpRunning;
     }
 
     private void Start()
@@ -48,7 +51,7 @@ public abstract class BasePowerUp : MonoBehaviour,PowerUp
         StartCoroutine(CoolingDown(_time));
     }
 
-    void PowerUpRunning(string _anyhting)
+    void PowerUpRunning(BasePowerUp _runningPowerUp, string _runningPowerUpName)
     {
         powerUpStillRunning = true;
     }

@@ -22,7 +22,7 @@ public class SnakeController : MonoBehaviour
     private int length;
     private int growthPoints;
     private bool scoreBoost;
-    
+
 
     
 
@@ -38,11 +38,14 @@ public class SnakeController : MonoBehaviour
     #region Public Events
 
     public event Action Die = delegate {  };
-    public event Action<string,int> Eat = delegate(string _foodName, int _foodValue) {  };
+    
+    public event Action Stop = delegate {  };
+    public event Action Move = delegate {  };
+    public event Action<BaseFood,string> Eat = delegate(BaseFood _eatenFood, string _foodName) {  };
     public event Action<int> Grow = delegate {  };
     public event Action<int> Shrink = delegate {  };
     public event Action<string,int> Hit = delegate(string _obstacleName, int _damage) {  };
-    public event Action<string> PowerUp = delegate(string _powerUpName) {  };
+    public event Action<BasePowerUp,string> PowerUp = delegate(BasePowerUp _eatenPowerUp, string _powerUpName) {  };
 
     public event Action<float> CoolDown = delegate(float _cooldownTime) { };
     public event Action<float> SpeedChanged = delegate(float _newspeed) {  };
@@ -82,12 +85,21 @@ public class SnakeController : MonoBehaviour
 
     private void OnEnable()
     {
+        LevelManager.Pause += StopSnake;
+        LevelManager.Continue += MoveSnake;
+        LevelManager.Finish += StopSnake;
+        LevelManager.Starting += MoveSnake;
         Grow += GrowSnake;
         Shrink += ShrinkSnake;
+        
     }
 
     private void OnDisable()
     {
+        LevelManager.Starting -= MoveSnake;
+        LevelManager.Finish -= StopSnake;
+        LevelManager.Pause -= StopSnake;
+        LevelManager.Continue -= MoveSnake;
         Grow -= GrowSnake;
         Shrink -= ShrinkSnake;
     }
@@ -191,36 +203,13 @@ public class SnakeController : MonoBehaviour
 
     #region Getters
 
-    public float GetStepSize()
-    {
-        return partSize;
-    }
-
-    public List<SnakePartController> GetSnakeParts()
-    {
-        return snakeParts;
-    }
-
-    public bool GetIsAlive()
-    {
-        return isAlive;
-    }
-
-    public Vector3 GetBounds()
-    {
-        return snakePartPrefab.GetComponent<BoxCollider2D>().size*snakePartPrefab.transform.localScale;
-    }
-
-    public float GetSpeed()
-    {
-        return speed;
-        
-    }
-
-    public int GetLength()
-    {
-        return snakeParts.Count;
-    }
+    public int GetScore() => score;
+    public float GetStepSize() => partSize;
+    public List<SnakePartController> GetSnakeParts() => snakeParts;
+    public bool GetIsAlive() => isAlive;
+    public Vector3 GetBounds()=> snakePartPrefab.GetComponent<BoxCollider2D>().size*snakePartPrefab.transform.localScale;
+    public float GetSpeed() => speed;
+    public int GetLength() => length;
 
     #endregion
 
@@ -247,14 +236,14 @@ public class SnakeController : MonoBehaviour
         UpdateAttribute(ref score, foodType, foodValue);
         UpdateAttribute(ref growthPoints, foodType, _food.GetGrowthPoints());
         HandleLength();
-        Eat.Invoke(_name, foodValue);
+        Eat.Invoke(_food, _name);
     }
 
     
 
-    public void PowerUpSnake(string _powerUpName)
+    public void PowerUpSnake(BasePowerUp _eatenPowerUp, string _powerUpName)
     {
-        PowerUp.Invoke(_powerUpName);
+        PowerUp.Invoke(_eatenPowerUp, _powerUpName);
     }
 
 
@@ -282,6 +271,16 @@ public class SnakeController : MonoBehaviour
     public void CoolDownFromPowerUP(float _time)
     {
         CoolDown.Invoke(_time);
+    }
+
+    public void MoveSnake()
+    {
+        Move.Invoke();
+    }
+
+    public void StopSnake()
+    {
+        Stop.Invoke();
     }
     #endregion
 

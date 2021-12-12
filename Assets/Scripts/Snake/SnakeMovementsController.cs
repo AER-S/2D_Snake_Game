@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class SnakeMovementsController : MonoBehaviour
 {
     private float stepTime;
+    private bool move;
     [SerializeField] private LayerMask obstacleLayerMask;
     private InputMaster controls;
     private Vector2 direction;
@@ -30,15 +31,25 @@ public class SnakeMovementsController : MonoBehaviour
         controls.Enable();
         controls.Snake.Movments.performed += context => GetNewDirection(context.ReadValue<Vector2>());
         snake.SpeedChanged += CheckSpeed;
+        snake.Move += MakeItMove;
+        snake.Stop += MakeItStop;
     }
+
+    private void PauseGame()
+    {
+        LevelManager.Instance.PauseGame();
+    }
+
     private void OnDisable()
     {
         if (controls != null)
         {
             controls.Snake.Movments.performed -= context => GetNewDirection(context.ReadValue<Vector2>());
             controls.Disable();
+            
         }
-
+        snake.Move -= MakeItMove;
+        snake.Stop -= MakeItStop;
         snake.SpeedChanged -= CheckSpeed;
     }
     private void Start()
@@ -50,18 +61,22 @@ public class SnakeMovementsController : MonoBehaviour
         headColliderBounds = snake.GetBounds();
         stepTime = snake.GetSpeed();
         wrap = false;
+        move = true;
         ResetTimeCounter();
     }
 
     private void Update()
     {
-        if (timeCounter>0f)
+        if (move)
         {
-            timeCounter -= Time.deltaTime;
-            return;
+            if (timeCounter>0f)
+            {
+                timeCounter -= Time.deltaTime;
+                return;
+            }
+            Move();
+            ResetTimeCounter();
         }
-        Move();
-        ResetTimeCounter();
     }
 
     #endregion
@@ -164,6 +179,16 @@ public class SnakeMovementsController : MonoBehaviour
     void CheckSpeed(float _newSpeed)
     {
         stepTime = _newSpeed; 
+    }
+
+    void MakeItMove()
+    {
+        move = true;
+    }
+
+    void MakeItStop()
+    {
+        move = false;
     }
 
     #endregion

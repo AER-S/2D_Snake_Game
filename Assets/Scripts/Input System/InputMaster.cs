@@ -35,6 +35,15 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""23ebcd64-ac80-487d-910f-8d1cc27ef314"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -158,6 +167,17 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""action"": ""Movments"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0f29432-51d1-4fb7-9351-d908cdca768e"",
+                    ""path"": ""<Keyboard>/#(P)"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -179,6 +199,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         // Snake
         m_Snake = asset.FindActionMap("Snake", throwIfNotFound: true);
         m_Snake_Movments = m_Snake.FindAction("Movments", throwIfNotFound: true);
+        m_Snake_Pause = m_Snake.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -239,11 +260,13 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Snake;
     private ISnakeActions m_SnakeActionsCallbackInterface;
     private readonly InputAction m_Snake_Movments;
+    private readonly InputAction m_Snake_Pause;
     public struct SnakeActions
     {
         private @InputMaster m_Wrapper;
         public SnakeActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movments => m_Wrapper.m_Snake_Movments;
+        public InputAction @Pause => m_Wrapper.m_Snake_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Snake; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -256,6 +279,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Movments.started -= m_Wrapper.m_SnakeActionsCallbackInterface.OnMovments;
                 @Movments.performed -= m_Wrapper.m_SnakeActionsCallbackInterface.OnMovments;
                 @Movments.canceled -= m_Wrapper.m_SnakeActionsCallbackInterface.OnMovments;
+                @Pause.started -= m_Wrapper.m_SnakeActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_SnakeActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_SnakeActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_SnakeActionsCallbackInterface = instance;
             if (instance != null)
@@ -263,6 +289,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Movments.started += instance.OnMovments;
                 @Movments.performed += instance.OnMovments;
                 @Movments.canceled += instance.OnMovments;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -279,5 +308,6 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     public interface ISnakeActions
     {
         void OnMovments(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }
